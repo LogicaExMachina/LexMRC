@@ -17,7 +17,7 @@ const tables = [
 				username VARCHAR(200) NOT NULL UNIQUE,
 				lastname VARCHAR(200),
 				firstname VARCHAR(200),
-				createdon TIMESTAMP
+				created_on TIMESTAMP
 			);
 		`
 	},{
