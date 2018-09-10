@@ -32,6 +32,67 @@ const tables = [
 				change_on_login BOOLEAN
 			);
 		`
+	},{
+		name: 'rewardtypes',
+		query:	`
+			CREATE TABLE IF NOT EXISTS rewardtypes
+			(
+				id SERIAL PRIMARY KEY,
+				type_name VARCHAR(100) NOT NULL,
+				active BOOLEAN NOT NULL DEFAULT TRUE
+			);
+		`
+	},{
+		name: 'rewards',
+		query: `
+			CREATE TABLE IF NOT EXISTS rewards
+			(
+				id SERIAL PRIMARY KEY,
+				reward_type INTEGER NOT NULL REFERENCES rewardtypes (id),
+				active BOOLEAN NOT NULL DEFAULT TRUE,
+				cost INTEGER,
+				name VARCHAR(100),
+				description TEXT,
+				CONSTRAINT rewards_cost_ck CHECK (cost > 0)
+			);
+		`
+	},{
+		name: 'user_rewards',
+		query: `
+			CREATE TABLE IF NOT EXISTS user_rewards
+			(
+				id SERIAL PRIMARY KEY,
+				user_id INTEGER NOT NULL REFERENCES users (id),
+				reward_id INTEGER NOT NULL REFERENCES rewards (id),
+				spent INTEGER NOT NULL,
+				CONSTRAINT user_rewards_spent_ck CHECK (spent > 0)
+			);
+		`
+	},{
+		name: 'activities',
+		query: `
+			CREATE TABLE IF NOT EXISTS activities
+			(
+				id SERIAL PRIMARY KEY,
+				active BOOLEAN NOT NULL DEFAULT TRUE,
+				value INTEGER,
+				name VARCHAR(100),
+				description TEXT,
+				CONSTRAINT activities_value_ck CHECK (value > 0)
+			);
+		`
+	},{
+		name: 'user_activities',
+		query: `
+			CREATE TABLE IF NOT EXISTS user_activities
+			(
+				id SERIAL PRIMARY KEY,
+				user_id INTEGER NOT NULL REFERENCES users (id),
+				activity_id	INTEGER NOT NULL REFERENCES activities (id),
+				earned INTEGER NOT NULL,
+				CONSTRAINT user_activities_earned_ck CHECK (earned > 0)
+			);
+		`
 	}
 ]
 
