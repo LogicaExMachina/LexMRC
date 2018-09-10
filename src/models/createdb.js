@@ -116,17 +116,23 @@ const functions = [
 ]
 
 async function create_tables() {
-	tables.forEach(async (t) => {
+//	tables.forEach(async (t) => {
+	for(const t of tables) {
 		await pool.query(t.query)
-	})
+	}
 }
 
 async function create_functions() {
-	functions.forEach(async (f) => {
+//	functions.forEach(async (f) => {
+	for(const f of functions) {
 		await pool.query(f.query);
-	})
+	}
 }
 
-create_tables();
-create_functions();
-pool.end();
+async function build_database() {
+	await create_tables();
+	await create_functions();
+	pool.end();
+}
+
+build_database();
